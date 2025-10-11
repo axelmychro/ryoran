@@ -1,6 +1,9 @@
 :root {
   --lane: #3d3d3d;
   --lane_active: #ff7081;
+  --imaginary: #ffde21;
+  --hit-line-height: 4rem;
+  --note-height: 6rem;
 }
 
 main {
@@ -8,47 +11,99 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 2000px;
 }
 
 .lanes {
-  /* background-color: green; */
+  position: fixed;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4rem;
-  margin-top: auto;
+  gap: 4vw;
+  margin-bottom: auto;
+  pointer-events: none;
+  z-index: 1;
 }
+
 .lane {
-  flex: 1;
-  /* aspect-ratio: 1; */
-  background: var(--lane);
-  width: 12vw;
-  max-width: 12vw;
-  height: 80vh;
-  /* border-radius: 10px; */
-  /* transition: background 0.1s; */
-  position: relative;
   overflow: hidden;
+  position: relative;
+  background: var(--lane);
+  width: 12rem;
+  max-width: 12rem;
+  height: 100vh;
+  pointer-events: none;
 }
+
 .lane.active {
   background: var(--lane_active);
 }
+
+.hit {
+  position: fixed;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  min-width: 100%;
+  height: var(--hit-line-height);
+  background: var(--imaginary);
+  text-align: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* CRITICAL FIX: Individual judgment popups per note */
+.judgment-popup {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  font-family: "Caveat", cursive;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 0 10px #000, 0 0 20px currentColor;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  will-change: opacity, transform;
+  transition: opacity 0.15s ease-out, transform 0.4s ease-out;
+}
+
+.judgment-popup.show {
+  opacity: 1;
+  transform: translate(-50%, -70%); /* Float upward for eye candy */
+}
+
 .note {
   position: absolute;
   left: 0;
   right: 0;
   margin: auto;
   width: 100%;
-  height: 1rem;
-  background: #fff;
+  height: var(--note-height);
+  min-height: var(--note-height);
+  background: red;
+  border: 2px solid #000;
   animation: fall linear forwards;
-  /* pointer-events: none; */
+  transition: opacity 0.1s ease-out;
+  /* CRITICAL FIX: GPU acceleration */
+  will-change: transform;
 }
+
+/* CRITICAL FIX: Precise alignment - note BOTTOM hits at hit line CENTER
+   - Hit line: bottom 5vh, height 4rem, so center at (5vh + 2rem) from bottom
+   - Note height: 6rem
+   - Note bottom should align at (5vh + 2rem) when animation completes
+   - Note top starts at -6rem (fully above screen)
+   - Note top should end at: 100vh - (5vh + 2rem) - 6rem = 95vh - 8rem
+*/
 @keyframes fall {
   from {
-    transform: translateY(-10%);
+    transform: translateY(-6rem);
   }
   to {
-    transform: translateY(100%);
+    /* Note bottom aligns with hit line center */
+    transform: translateY(calc(95vh - 8rem));
   }
 }

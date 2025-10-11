@@ -1,0 +1,17 @@
+{
+  "title": "No Dazzle, No Break",
+  "artist": "HOYO-MiX feat. Reol",
+  "audio": "./techniques/1_break/1_break.webm",
+  "bpm": 110,
+  "offset": 0,
+  "noteSpeed": 1.0,
+  "notes": [
+    { "time": 1, "lane": "ll" },
+    { "time": 2, "lane": "lm" },
+    { "time": 3, "lane": "rm" },
+    { "time": 4, "lane": "rr" },
+    { "time": 5, "lane": "rm" },
+    { "time": 6, "lane": "lm" },
+    { "time": 7, "lane": "ll" }
+  ]
+}
